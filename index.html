@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Studio - Pastel Collections</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-pastel: #FDFbf7;
+            --rose: #F4EAE6;
+            --butter: #FBF4E2;
+            --sage: #E8EFE9;
+            --lavender: #EFEAED;
+            --text-main: #2C2A29;
+            --accent-terracotta: #D48C7D;
+            --accent-sage: #8A9A86;
+            --white: #FFFFFF;
+            --border-color: #E6E0DD;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-pastel);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3,
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            background: var(--rose);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .badge {
+            background: var(--sage);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .domain-slider {
+            background: var(--white);
+            padding: 0.75rem 2rem;
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .slider-btn {
+            background: transparent;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .slider-btn.active {
+            background: var(--butter);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-view {
+            display: none;
+        }
+
+        .section-view.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: var(--lavender);
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .card-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-terracotta);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-available {
+            background: var(--sage);
+            color: #2D5A27;
+        }
+
+        .status-sold {
+            background: var(--rose);
+            color: #8F2D32;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .auth-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            background: var(--bg-pastel);
+        }
+
+        .form-input:focus,
+        textarea:focus {
+            border-color: var(--accent-terracotta);
+            background: var(--white);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: var(--white);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .admin-table th {
+            background: var(--lavender);
+            font-weight: 700;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--text-main);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 200;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="mainHeader" style="display: none;">
+        <div class="logo-area">
+            <div class="logo-icon">🎨</div>
+            <span>Art Studio</span>
+        </div>
+        <div class="user-nav">
+            <span id="userBadge" class="badge"></span>
+            <button class="btn btn-outline" onclick="handleLogout()"
+                style="padding: 0.4rem 1rem; font-size: 0.85rem;">Logout</button>
+        </div>
+    </header>
+
+    <nav class="domain-slider" id="domainSliderBar" style="display: none;">
+        <button class="slider-btn active" id="tabPaintings" onclick="switchDomain('paintings')">🖼️ Traditional
+            Paintings</button>
+        <button class="slider-btn" id="tabWall" onclick="switchDomain('wall')">🖌️ Wall Space Murals</button>
+        <button class="slider-btn" id="tabPottery" onclick="switchDomain('pottery')">🏺 Custom Pottery</button>
+        <button class="slider-btn" id="tabMyOrders" onclick="switchDomain('myOrders')">📦 My Bookings & Orders</button>
+        <button class="slider-btn" id="tabArtist" onclick="switchDomain('artist')" style="display:none;">🛠️ Artist
+            Workspace</button>
+        <button class="slider-btn" id="tabStudio" onclick="switchDomain('studio')" style="display:none;">🏢 Studio
+            Dashboard</button>
+    </nav>
+
+    <main class="main-container">
+
+        <!-- Auth Screen -->
+        <div id="authScreen" class="auth-wrapper">
+            <div class="auth-card">
+                <h2 id="authTitle" class="serif" style="font-size: 1.8rem; margin-bottom: 0.5rem; text-align: center;">
+                    Art Studio</h2>
+                <p id="authSubtitle" style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 2rem;">
+                    Please login or register to explore collections</p>
+
+                <form onsubmit="handleAuthSubmit(event)">
+                    <div class="form-group" id="fullNameGroup" style="display: none;">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="authFullName" class="form-input" placeholder="Jane Doe">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Username / Email</label>
+                        <input type="text" id="authUsername" class="form-input" required placeholder="user@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="authPassword" class="form-input" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group" id="roleGroup" style="display: none;">
+                        <label class="form-label">Role</label>
+                        <select id="authRole" class="form-select">
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin / Artist</option>
+                            <option value="studio">Studio Manager</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="authSubmitBtn" class="btn btn-primary"
+                        style="margin-top: 1rem;">Login</button>
+                </form>
+
+                <p style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem;">
+                    <span id="toggleAuthText">Don't have an account?</span>
+                    <a href="#" onclick="toggleAuthMode()"
+                        style="color: var(--accent-terracotta); font-weight: 700; text-decoration: none;">Register</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Paintings View -->
+        <section id="paintingsView" class="section-view">
+            <div style="margin-bottom: 2rem;">
+                <h2 class="serif" style="font-size: 2rem; margin-bottom: 0.5rem;">Indian Heritage Paintings</h2>
+                <p style="color: #666;">Click any artwork to inspect details and purchase.</p>
+            </div>
+            <div class="grid" id="paintingsGrid"></div>
+        </section>
+
+        <!-- Wall Murals Booking View with Artist Selection Dropdown -->
+        <section id="wallView" class="section-view">
+            <div
+                style="max-width: 600px; margin: 0 auto; background: var(--white); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color);">
+                <h2 class="serif" style="font-size: 1.8rem; margin-bottom: 0.5rem;">Book Wall Space Mural</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Fixed Price: <strong>₹150 / sq ft</strong></p>
+                <form onsubmit="handleWallBooking(event)">
+                    <div class="form-group">
+                        <label class="form-label">Select Preferred Artist</label>
+                        <select id="wallArtistSelect" class="form-select" required>
+                            <option value="">-- Select an Artist --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Wall Size (sq ft)</label>
+                        <input type="number" id="wallSize" class="form-input" min="1" required
+                            oninput="calculateWallPrice()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Date (Must be at least 3 days in advance)</label>
+                        <input type="date" id="wallDate" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address / Location</label>
+                        <textarea id="wallAddress" rows="3" class="form-input" required
+                            placeholder="Enter full address"></textarea>
+                    </div>
+                    <div
+                        style="background: var(--butter); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Total Estimated Cost:</span>
+                        <strong id="wallCalculatedPrice"
+                            style="font-size: 1.25rem; color: var(--accent-terracotta);">₹0</strong>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Wall Booking Request</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Custom Pottery View with Artist Selection Dropdown -->
+        <section id="potteryView" class="section-view">
+            <div
+                style="max-width: 600px; margin: 0 auto; background: var(--white); padding: 2.5rem; border-radius: 20px; border: 1px solid var(--border-color);">
+                <h2 class="serif" style="font-size: 1.8rem; margin-bottom: 0.5rem;">Custom Pottery Request</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">Handcrafted terracotta and glazed ceramics tailored to
+                    your needs.</p>
+                <form onsubmit="handlePotteryRequest(event)">
+                    <div class="form-group">
+                        <label class="form-label">Select Preferred Artist</label>
+                        <select id="potteryArtistSelect" class="form-select" required>
+                            <option value="">-- Select an Artist --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Item Type</label>
+                        <select id="potteryItem" class="form-select">
+                            <option value="Vase">Decorative Vase</option>
+                            <option value="Planter">Garden Planter</option>
+                            <option value="Dinnerware Set">Ceramic Dinnerware Set</option>
+                            <option value="Custom Sculpt">Custom Sculptural Piece</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Glaze Finish</label>
+                        <input type="text" id="potteryGlaze" class="form-input" required
+                            placeholder="e.g., Matte Sage, Glossy Terracotta">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" id="potteryQty" class="form-input" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Needed By Date (At least 14 days in advance)</label>
+                        <input type="date" id="potteryDate" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Pottery Request</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Customer Orders & Bookings Pane -->
+        <section id="myOrdersView" class="section-view">
+            <h2 class="serif" style="font-size: 2rem; margin-bottom: 1.5rem;">My Purchases & Bookings</h2>
+            <div id="customerHistoryContainer">Loading your records...</div>
+        </section>
+
+        <!-- Artist Workspace View (Shows ONLY his/her orders) -->
+        <section id="artistView" class="section-view">
+            <h2 class="serif" style="font-size: 2rem; margin-bottom: 0.5rem;">Artist Workspace</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Manage your assigned works, upload new paintings, and view
+                orders placed for you.</p>
+
+            <div
+                style="background: var(--white); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 2rem;">
+                <h3 class="serif" style="font-size: 1.4rem; margin-bottom: 1rem;">Upload New Painting</h3>
+                <form onsubmit="handleAddPainting(event)"
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group"><input type="text" id="adminTitle" class="form-input" placeholder="Title"
+                            required></div>
+                    <div class="form-group"><input type="text" id="adminArtist" class="form-input"
+                            placeholder="Artist Name (Your Name)" required></div>
+                    <div class="form-group"><input type="text" id="adminImg" class="form-input"
+                            placeholder="Image URL / Path" required></div>
+                    <div class="form-group"><input type="number" id="adminPrice" class="form-input"
+                            placeholder="Price (₹)" required></div>
+                    <div class="form-group" style="grid-column: span 2;"><textarea id="adminDesc" class="form-input"
+                            placeholder="Description" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="grid-column: span 2;">Publish Artwork</button>
+                </form>
+            </div>
+
+            <h3 class="serif" style="font-size: 1.4rem; margin-bottom: 1rem;">My Assigned Murals, Pottery & Sold
+                Artworks</h3>
+            <div id="artistTasksContainer">Loading your tasks...</div>
+        </section>
+
+        <!-- Studio Manager Dashboard View -->
+        <section id="studioView" class="section-view">
+            <h2 class="serif" style="font-size: 2rem; margin-bottom: 0.5rem;">Studio Manager Dashboard</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Overview of studio operations, artist workloads, and all
+                bookings.</p>
+
+            <div id="artistWorkloadSummary" class="grid" style="margin-bottom: 2.5rem;"></div>
+
+            <h3 class="serif" style="font-size: 1.4rem; margin-bottom: 1rem;">All Studio Bookings & Orders</h3>
+            <div id="studioBookingsContainer">Loading studio data...</div>
+        </section>
+
+    </main>
+
+    <!-- Modals -->
+    <div class="modal" id="paintingModal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 id="modalPaintingTitle" class="serif" style="font-size: 1.5rem;"></h3>
+                <button class="btn btn-outline" onclick="closePaintingModal()"
+                    style="padding: 0.2rem 0.6rem;">✕</button>
+            </div>
+            <img id="modalPaintingImg" src=""
+                style="width: 100%; height: 260px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">
+            <p id="modalPaintingArtist" style="font-weight: 600; color: #555; margin-bottom: 0.5rem;"></p>
+            <p id="modalPaintingDesc" style="color: #666; font-size: 0.95rem; margin-bottom: 1rem;"></p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <span id="modalPaintingPrice" class="card-price" style="font-size: 1.5rem;"></span>
+            </div>
+            <div id="modalActionArea"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="confirmDialog">
+        <div class="modal-content" style="max-width: 380px; text-align: center;">
+            <h3 class="serif" style="margin-bottom: 1rem;">Confirm Action</h3>
+            <p id="confirmMessage" style="color: #666; margin-bottom: 1.5rem;">Are you sure?</p>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-outline" style="flex: 1;" onclick="closeConfirmDialog()">Cancel</button>
+                <button class="btn btn-primary" id="confirmActionBtn"
+                    style="flex: 1; background: var(--accent-terracotta);">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        const API_BASE = "http://localhost:2500/api";
+        let currentUser = null;
+        let isRegisterMode = false;
+        let activePaintingId = null;
+        let allPaintingsCache = [];
+
+        let activeCancelId = null;
+        let activeCancelType = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            checkSession();
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.style.display = "block";
+            setTimeout(() => { toast.style.display = "none"; }, 3000);
+        }
+
+        function checkSession() {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    currentUser = payload;
+
+                    document.getElementById("authScreen").style.display = "none";
+                    document.getElementById("mainHeader").style.display = "flex";
+                    document.getElementById("domainSliderBar").style.display = "flex";
+                    document.querySelector(".main-container").style.marginTop = "2rem";
+
+                    document.getElementById("userBadge").innerText = `${payload.username} (${payload.role})`;
+
+                    document.getElementById("tabPaintings").style.display = "inline-block";
+                    document.getElementById("tabWall").style.display = "inline-block";
+                    document.getElementById("tabPottery").style.display = "inline-block";
+                    document.getElementById("tabMyOrders").style.display = "inline-block";
+
+                    const artistTab = document.getElementById("tabArtist");
+                    const studioTab = document.getElementById("tabStudio");
+
+                    if (payload.role === "admin") {
+                        artistTab.style.display = "inline-block";
+                        studioTab.style.display = "none";
+                        switchDomain('paintings');
+                    } else if (payload.role === "studio") {
+                        artistTab.style.display = "none";
+                        studioTab.style.display = "inline-block";
+                        switchDomain('studio');
+                    } else {
+                        artistTab.style.display = "none";
+                        studioTab.style.display = "none";
+                        switchDomain('paintings');
+                        loadArtistDropdowns(); // Load available artists for customer booking forms
+                    }
+                } catch (e) {
+                    handleLogout();
+                }
+            } else {
+                document.getElementById("authScreen").style.display = "flex";
+                document.getElementById("mainHeader").style.display = "none";
+                document.getElementById("domainSliderBar").style.display = "none";
+            }
+        }
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById("authTitle").innerText = isRegisterMode ? "Create Account" : "Art Studio";
+            document.getElementById("authSubtitle").innerText = isRegisterMode ? "Register to access collections" : "Please login or register to explore collections";
+            document.getElementById("fullNameGroup").style.display = isRegisterMode ? "block" : "none";
+            document.getElementById("roleGroup").style.display = isRegisterMode ? "block" : "none";
+            document.getElementById("authSubmitBtn").innerText = isRegisterMode ? "Register" : "Login";
+            document.getElementById("toggleAuthText").innerText = isRegisterMode ? "Already have an account?" : "Don't have an account?";
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById("authUsername").value;
+            const password = document.getElementById("authPassword").value;
+            const fullName = document.getElementById("authFullName").value;
+            const role = document.getElementById("authRole").value;
+
+            const endpoint = isRegisterMode ? `${API_BASE}/auth/register` : `${API_BASE}/auth/login`;
+            const payload = isRegisterMode ? { username, password, fullName, role } : { username, password };
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast(data.message || "Success!");
+                    if (data.token) {
+                        localStorage.setItem("token", data.token);
+                    } else {
+                        isRegisterMode = false;
+                        toggleAuthMode();
+                        showToast("Registration successful! Please login.");
+                        return;
+                    }
+                    checkSession();
+                } else {
+                    showToast(data.message || "Authentication failed");
+                }
+            } catch (err) {
+                showToast("Server connection error");
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem("token");
+            currentUser = null;
+            checkSession();
+            showToast("Logged out successfully");
+        }
+
+        function switchDomain(domain) {
+            document.querySelectorAll(".slider-btn").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll(".section-view").forEach(view => view.classList.remove("active"));
+
+            const tabIdMap = {
+                'paintings': 'tabPaintings',
+                'wall': 'tabWall',
+                'pottery': 'tabPottery',
+                'myOrders': 'tabMyOrders',
+                'artist': 'tabArtist',
+                'studio': 'tabStudio'
+            };
+            const targetBtn = document.getElementById(tabIdMap[domain]);
+            if (targetBtn) targetBtn.classList.add("active");
+
+            const targetView = document.getElementById(`${domain}View`);
+            if (targetView) targetView.classList.add("active");
+
+            if (domain === 'paintings') fetchPaintings();
+            if (domain === 'wall' || domain === 'pottery') loadArtistDropdowns();
+            if (domain === 'myOrders') loadCustomerHistory();
+            if (domain === 'artist') loadArtistWorkspace();
+            if (domain === 'studio') loadStudioDashboard();
+        }
+
+        // Fetch unique artist names for customer booking dropdowns
+        async function loadArtistDropdowns() {
+            try {
+                const res = await fetch(`${API_BASE}/paintings/viewItems`, { credentials: "include" });
+                const data = await res.json();
+                if (data.success && Array.isArray(data.paintings)) {
+                    // Extract unique artist names
+                    const artists = [...new Set(data.paintings.map(p => p.artist))];
+
+                    const wallSelect = document.getElementById("wallArtistSelect");
+                    const potterySelect = document.getElementById("potteryArtistSelect");
+
+                    const optionsHtml = `<option value="">-- Select an Artist --</option>` +
+                        artists.map(a => `<option value="${a}">${a}</option>`).join("");
+
+                    if (wallSelect) wallSelect.innerHTML = optionsHtml;
+                    if (potterySelect) potterySelect.innerHTML = optionsHtml;
+                }
+            } catch (e) {
+                console.error("Error loading artists for dropdown", e);
+            }
+        }
+
+        async function fetchPaintings() {
+            try {
+                const res = await fetch(`${API_BASE}/paintings/viewItems`, {
+                    method: "GET",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" }
+                });
+                const data = await res.json();
+                const grid = document.getElementById("paintingsGrid");
+
+                if (data.success && Array.isArray(data.paintings)) {
+                    allPaintingsCache = data.paintings;
+                    grid.innerHTML = data.paintings.map(p => {
+                        const imgPath = p.paintingImage?.startsWith('/') ? p.paintingImage : `/${p.paintingImage}`;
+                        return `
+                            <div class="card" onclick="openPaintingModal('${p._id}')">
+                                <img src="${imgPath}" class="card-img" alt="${p.title}" onerror="this.src='https://via.placeholder.com/300x200?text=Art+Studio'">
+                                <div class="card-body">
+                                    <div>
+                                        <div class="card-title">${p.title}</div>
+                                        <div style="color: #7A6F6B; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">By ${p.artist}</div>
+                                        <div class="card-desc">${p.descriptions || ''}</div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="card-price">₹${p.price}</div>
+                                        <span class="status-badge ${p.isAvailable ? 'status-available' : 'status-sold'}">${p.isAvailable ? 'Available' : 'Sold Out'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            } catch (err) {
+                console.error("Error fetching paintings:", err);
+            }
+        }
+
+        function openPaintingModal(id) {
+            const p = allPaintingsCache.find(item => item._id === id);
+            if (!p) return;
+
+            activePaintingId = id;
+            document.getElementById("modalPaintingImg").src = p.paintingImage?.startsWith('/') ? p.paintingImage : `/${p.paintingImage}`;
+            document.getElementById("modalPaintingTitle").innerText = p.title;
+            document.getElementById("modalPaintingArtist").innerText = `Artist: ${p.artist}`;
+            document.getElementById("modalPaintingDesc").innerText = p.descriptions || '';
+            document.getElementById("modalPaintingPrice").innerText = `₹${p.price}`;
+
+            const actionArea = document.getElementById("modalActionArea");
+            if (currentUser && currentUser.role === 'studio') {
+                actionArea.innerHTML = `<button class="btn btn-primary" onclick="promptEditPainting('${p._id}')">Edit Painting Details</button>`;
+            } else if (currentUser && currentUser.role === 'admin') {
+                actionArea.innerHTML = `<div style="text-align: center; color: #666; font-weight: 600;">Admin View</div>`;
+            } else if (p.isAvailable) {
+                actionArea.innerHTML = `<button class="btn btn-primary" onclick="promptBuyPainting()">Buy Now (Artist: ${p.artist})</button>`;
+            } else {
+                actionArea.innerHTML = `<div style="text-align: center; color: #8F2D32; font-weight: 700;">Sold Out</div>`;
+            }
+
+            document.getElementById("paintingModal").classList.add("active");
+        }
+
+        function closePaintingModal() {
+            document.getElementById("paintingModal").classList.remove("active");
+        }
+
+        function promptBuyPainting() {
+            document.getElementById("paintingModal").classList.remove("active");
+            document.getElementById("confirmDialog").classList.add("active");
+            document.getElementById("confirmMessage").innerText = "Confirm purchase of this artwork? The designated artist will be notified.";
+            document.getElementById("confirmActionBtn").onclick = executeBuyPainting;
+        }
+
+        async function executeBuyPainting() {
+            closeConfirmDialog();
+            try {
+                const res = await fetch(`${API_BASE}/paintings/${activePaintingId}/buy`, {
+                    method: "POST",
+                    credentials: "include"
+                });
+                const data = await res.json();
+                showToast(data.message);
+                if (res.ok) fetchPaintings();
+            } catch (err) {
+                showToast("Purchase error");
+            }
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById("confirmDialog").classList.remove("active");
+        }
+
+        function calculateWallPrice() {
+            const size = document.getElementById("wallSize").value || 0;
+            document.getElementById("wallCalculatedPrice").innerText = `₹${size * 150}`;
+        }
+
+        async function handleWallBooking(e) {
+            e.preventDefault();
+            const dateVal = document.getElementById("wallDate").value;
+            const payload = {
+                artist: document.getElementById("wallArtistSelect").value,
+                size: document.getElementById("wallSize").value,
+                date: dateVal,
+                address: document.getElementById("wallAddress").value
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/wall-bookings`, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                showToast(data.message);
+                if (res.ok) switchDomain('myOrders');
+            } catch (err) {
+                showToast("Booking failed");
+            }
+        }
+
+        async function handlePotteryRequest(e) {
+            e.preventDefault();
+            const dateVal = document.getElementById("potteryDate").value;
+            const payload = {
+                artist: document.getElementById("potteryArtistSelect").value,
+                item: document.getElementById("potteryItem").value,
+                glaze: document.getElementById("potteryGlaze").value,
+                quantity: document.getElementById("potteryQty").value,
+                neededByDate: dateVal
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/pottery-requests`, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                showToast(data.message);
+                if (res.ok) switchDomain('myOrders');
+            } catch (err) {
+                showToast("Request failed");
+            }
+        }
+
+        async function loadCustomerHistory() {
+            const container = document.getElementById("customerHistoryContainer");
+            container.innerHTML = "Loading...";
+
+            try {
+                const [paintingsRes, wallRes, potteryRes] = await Promise.all([
+                    fetch(`${API_BASE}/paintings/my-purchases`, { credentials: "include" }),
+                    fetch(`${API_BASE}/wall-bookings`, { credentials: "include" }),
+                    fetch(`${API_BASE}/pottery-requests`, { credentials: "include" })
+                ]);
+
+                const paintingsData = await paintingsRes.json();
+                const wallData = await wallRes.json();
+                const potteryData = await potteryRes.json();
+
+                let html = `<h3 class="serif" style="margin-bottom: 1rem;">Bought Paintings</h3>`;
+                if (paintingsData.success && paintingsData.paintings?.length > 0) {
+                    html += `<table class="admin-table"><tr><th>Title</th><th>Artist</th><th>Price</th><th>Action</th></tr>`;
+                    paintingsData.paintings.forEach(p => {
+                        html += `<tr><td>${p.title}</td><td>${p.artist}</td><td>₹${p.price}</td><td><button class="btn btn-outline" style="padding:0.3rem 0.8rem;" onclick="cancelPaintingOrder('${p._id}')">Cancel Order</button></td></tr>`;
+                    });
+                    html += `</table>`;
+                } else {
+                    html += `<p style="color:#666; margin-bottom: 2rem;">No paintings bought yet.</p>`;
+                }
+
+                html += `<h3 class="serif" style="margin: 2rem 0 1rem 0;">Wall Mural Bookings</h3>`;
+                if (wallData.success && wallData.bookings?.length > 0) {
+                    html += `<table class="admin-table"><tr><th>Artist</th><th>Date</th><th>Size</th><th>Status</th><th>Action</th></tr>`;
+                    wallData.bookings.forEach(b => {
+                        const bookingDate = new Date(b.date);
+                        const canCancel = (bookingDate - new Date()) / (1000 * 60 * 60 * 24) >= 3;
+                        html += `<tr>
+                            <td>${b.artist || 'Assigned Artist'}</td>
+                            <td>${new Date(b.date).toLocaleDateString()}</td>
+                            <td>${b.size} sq ft</td>
+                            <td><strong>${b.status}</strong></td>
+                            <td>${canCancel ? `<button class="btn btn-outline" style="padding:0.3rem 0.8rem;" onclick="cancelWallBooking('${b._id}')">Cancel</button>` : `<span style="color:#888; font-size:0.8rem;">Lock window (< 3 days)</span>`}</td>
+                        </tr>`;
+                    });
+                    html += `</table>`;
+                } else {
+                    html += `<p style="color:#666; margin-bottom: 2rem;">No wall bookings found.</p>`;
+                }
+
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = `<p style="color:red;">Error loading history.</p>`;
+            }
+        }
+
+        function cancelPaintingOrder(id) {
+            activeCancelId = id;
+            activeCancelType = 'painting';
+            document.getElementById("confirmMessage").innerText = "Are you sure you want to cancel this painting order?";
+            document.getElementById("confirmActionBtn").onclick = executeConfirmedCancellation;
+            document.getElementById("confirmDialog").classList.add("active");
+        }
+
+        function cancelWallBooking(id) {
+            activeCancelId = id;
+            activeCancelType = 'wall';
+            document.getElementById("confirmMessage").innerText = "Are you sure you want to cancel this wall mural booking?";
+            document.getElementById("confirmActionBtn").onclick = executeConfirmedCancellation;
+            document.getElementById("confirmDialog").classList.add("active");
+        }
+
+        async function executeConfirmedCancellation() {
+            closeConfirmDialog();
+            if (!activeCancelId || !activeCancelType) return;
+
+            let endpoint = "";
+            if (activeCancelType === 'painting') {
+                endpoint = `${API_BASE}/paintings/${activeCancelId}/cancel`;
+            } else if (activeCancelType === 'wall') {
+                endpoint = `${API_BASE}/wall-bookings/${activeCancelId}/cancel`;
+            }
+
+            try {
+                const res = await fetch(endpoint, { method: "POST", credentials: "include" });
+                const data = await res.json();
+                showToast(data.message);
+                if (res.ok) loadCustomerHistory();
+            } catch (err) {
+                showToast("Error processing cancellation");
+            } finally {
+                activeCancelId = null;
+                activeCancelType = null;
+            }
+        }
+
+        // Artist Workspace: Shows ONLY tasks/orders belonging to the logged-in artist
+        async function loadArtistWorkspace() {
+            const container = document.getElementById("artistTasksContainer");
+            container.innerHTML = "Loading your assigned tasks...";
+            try {
+                const res = await fetch(`${API_BASE}/paintings/artist/tasks`, { credentials: "include" });
+                const data = await res.json();
+                if (data.success) {
+                    let html = "";
+
+                    const paintings = data.tasks.paintings || [];
+                    if (paintings.length > 0) {
+                        html += `<h4 class="serif" style="margin-bottom:0.5rem;">Your Artworks & Sold Status</h4>`;
+                        html += `<table class="admin-table"><tr><th>Title</th><th>Price</th><th>Status</th></tr>`;
+                        paintings.forEach(p => {
+                            html += `<tr><td>${p.title}</td><td>₹${p.price}</td><td><strong style="color:${p.isAvailable ? 'green' : 'red'}">${p.isAvailable ? 'Available' : 'Sold'}</strong></td></tr>`;
+                        });
+                        html += `</table><br>`;
+                    }
+
+                    const wallBookings = data.tasks.wallBookings || [];
+                    if (wallBookings.length > 0) {
+                        html += `<h4 class="serif" style="margin-bottom:0.5rem;">Wall Mural Bookings Assigned to You</h4>`;
+                        html += `<table class="admin-table"><tr><th>Date</th><th>Size</th><th>Address</th><th>Status</th></tr>`;
+                        wallBookings.forEach(w => {
+                            html += `<tr><td>${new Date(w.date).toLocaleDateString()}</td><td>${w.size} sq ft</td><td>${w.address}</td><td><strong>${w.status}</strong></td></tr>`;
+                        });
+                        html += `</table>`;
+                    }
+
+                    if (!html) {
+                        container.innerHTML = `<p style="color:#666;">No tasks or orders assigned to you yet.</p>`;
+                    } else {
+                        container.innerHTML = html;
+                    }
+                }
+            } catch (e) {
+                container.innerHTML = `<p style="color:red;">Error loading artist workspace.</p>`;
+            }
+        }
+
+        async function handleAddPainting(e) {
+            e.preventDefault();
+            const payload = {
+                title: document.getElementById("adminTitle").value,
+                artist: document.getElementById("adminArtist").value,
+                paintingImage: document.getElementById("adminImg").value,
+                price: document.getElementById("adminPrice").value,
+                descriptions: document.getElementById("adminDesc").value
+            };
+
+            const res = await fetch(`${API_BASE}/paintings/addPainting`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            showToast(data.message);
+            if (res.ok) switchDomain('paintings');
+        }
+
+        async function loadStudioDashboard() {
+            const summaryContainer = document.getElementById("artistWorkloadSummary");
+            const bookingsContainer = document.getElementById("studioBookingsContainer");
+
+            try {
+                const res = await fetch(`${API_BASE}/paintings/studio/dashboard`, { credentials: "include" });
+                const data = await res.json();
+
+                if (data.success) {
+                    summaryContainer.innerHTML = data.artistWorkloads.map(w => `
+                        <div style="background:var(--white); padding:1.5rem; border-radius:16px; border:1px solid var(--border-color);">
+                            <h4 class="serif" style="font-size:1.2rem; margin-bottom:0.5rem;">🧑‍🎨 ${w.artistName}</h4>
+                            <p style="color:#666; font-size:0.9rem;">Uploaded / Associated Artworks: <strong>${w.orderCount}</strong></p>
+                        </div>
+                    `).join("");
+
+                    bookingsContainer.innerHTML = `<table class="admin-table">
+                        <tr><th>Customer</th><th>Artist</th><th>Service</th><th>Date</th><th>Status</th></tr>
+                        ${data.allBookings.map(b => `<tr><td>${b.customer?.fullName || 'User'}</td><td>${b.artist || 'Any'}</td><td>${b.serviceType}</td><td>${new Date(b.date).toLocaleDateString()}</td><td><strong>${b.status}</strong></td></tr>`).join("")}
+                    </table>`;
+                }
+            } catch (e) {
+                summaryContainer.innerHTML = `<p>Error loading studio metrics.</p>`;
+            }
+        }
+
+        function promptEditPainting(id) {
+            closePaintingModal();
+            const p = allPaintingsCache.find(item => item._id === id);
+            const newPrice = prompt("Enter new price:", p.price);
+            if (newPrice) {
+                updatePaintingDetails(id, { price: newPrice });
+            }
+        }
+
+        async function updatePaintingDetails(id, payload) {
+            const res = await fetch(`${API_BASE}/paintings/editPainting/${id}`, {
+                method: "PUT",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            showToast(data.message);
+            if (res.ok) fetchPaintings();
+        }
+    </script>
+</body>
+
+</html>
