@@ -1,5 +1,8 @@
 import exp from "express";
 import { paintingModel } from "../models/paintingModel.js";
+import { wallBookingModel } from "../models/wallBookingModel.js";
+import { potteryRequestModel } from "../models/potteryRequestModel.js";
+import { userModel } from "../models/userModel.js";
 import { verifyToken } from "../middlewares/tokenVerificationMiddleware.js";
 import { allowedRoles } from "../middlewares/allowedRolesMiddleware.js";
 
@@ -8,10 +11,7 @@ export const paintingRouter = exp.Router();
 // 1. GET ALL PAINTINGS (Accessible to both customer and admin)
 paintingRouter.get("/viewItems", verifyToken, async (req, res, next) => {
     try {
-        // Fetch all paintings from database
         const paintings = await paintingModel.find({});
-
-        // Return 200 with paintings array
         res.status(200).json({
             success: true,
             count: paintings.length,
@@ -147,8 +147,7 @@ paintingRouter.post("/:id/cancel", verifyToken, allowedRoles(["customer"]), asyn
     }
 });
 
-
-// GET CUSTOMER PURCHASES
+// 6. GET CUSTOMER PURCHASES
 paintingRouter.get("/my-purchases", verifyToken, allowedRoles(["customer"]), async (req, res, next) => {
     try {
         const paintings = await paintingModel.find({ boughtBy: req.user.id });
@@ -158,51 +157,77 @@ paintingRouter.get("/my-purchases", verifyToken, allowedRoles(["customer"]), asy
     }
 });
 
-// ARTIST TASKS WORKSPACE
+// 7. ARTIST TASKS WORKSPACE (Filters for the logged-in artist)
 paintingRouter.get("/artist/tasks", verifyToken, allowedRoles(["admin"]), async (req, res, next) => {
     try {
-        // Fetch wall bookings or pottery requests assigned to this artist
-        const wallBookings = await wallBookingModel.find({});
-        const potteryReqs = await potteryRequestModel.find({});
+        const artistName = req.user.username;
 
-        const tasks = [
-            ...wallBookings.map(b => ({ ...b.toObject(), type: 'Wall Mural' })),
-            ...potteryReqs.map(p => ({ ...p.toObject(), type: 'Pottery' }))
-        ];
-        res.status(200).json({ success: true, tasks });
+        const paintings = await paintingModel.find({ artist: { $regex: new RegExp(artistName, "i") } });
+        const wallBookings = await wallBookingModel.find({ artist: req.user.id });
+        const potteryReqs = await potteryRequestModel.find({ artist: req.user.id });
+
+        res.status(200).json({
+            success: true,
+            tasks: {
+                paintings,
+                wallBookings,
+                potteryReqs
+            }
+        });
     } catch (err) {
         next(err);
     }
 });
 
-// STUDIO DASHBOARD & WORKLOAD ANALYTICS
+// 8. STUDIO DASHBOARD & WORKLOAD ANALYTICS
 paintingRouter.get("/studio/dashboard", verifyToken, allowedRoles(["studio"]), async (req, res, next) => {
     try {
-        const paintings = await paintingModel.find({});
-        const wallBookings = await wallBookingModel.find({}).populate("customer", "fullName");
-        const potteryReqs = await potteryRequestModel.find({}).populate("customer", "fullName");
+        const artists = await userModel.find({ role: "admin" });
+        const allPaintings = await paintingModel.find({});
+        const allWallBookings = await wallBookingModel.find({});
+        const allPotteryRequests = await potteryRequestModel.find({});
 
-        // Calculate workload counts per artist based on paintings uploaded or assigned
-        const artistMap = {};
-        paintings.forEach(p => {
-            const artist = p.artist || "Unknown Artist";
-            artistMap[artist] = (artistMap[artist] || 0) + 1;
-        });
+        const artistWorkloads = await Promise.all(artists.map(async (artist) => {
+            const artistIdStr = artist._id.toString();
+            const artistName = (artist.fullName || artist.username || "").trim().toLowerCase();
 
-        const artistWorkloads = Object.keys(artistMap).map(artistName => ({
-            artistName,
-            orderCount: artistMap[artistName]
+            // 1. PAINTINGS: Match strictly using the artist's name string
+            const artistPaintings = allPaintings.filter(p => {
+                if (!p || !p.artist) return false;
+                return String(p.artist).trim().toLowerCase() === artistName;
+            });
+            const soldPaintings = artistPaintings.filter(p => !p.isAvailable || p.status === 'sold').length;
+
+            // 2. WALL MURALS: Match strictly using Artist ObjectId reference
+            const murals = allWallBookings.filter(w => {
+                if (!w || !w.artist) return false;
+                return w.artist.toString() === artistIdStr;
+            });
+
+            // 3. POTTERY REQUESTS: Match strictly using Artist ObjectId reference
+            const pottery = allPotteryRequests.filter(r => {
+                if (!r || !r.artist) return false;
+                return r.artist.toString() === artistIdStr;
+            });
+
+            return {
+                artistId: artist._id,
+                artistName: artist.fullName || artist.username,
+                paintingsTotal: artistPaintings.length,
+                paintingsSold: soldPaintings,
+                muralsReceived: murals.length,
+                muralsAccepted: murals.filter(w => w.status === "confirmed" || w.status === "accepted").length,
+                muralsDeclined: murals.filter(w => w.status === "declined").length,
+                potteryReceived: pottery.length,
+                potteryAccepted: pottery.filter(r => r.status === "confirmed" || r.status === "accepted").length,
+                potteryDeclined: pottery.filter(r => r.status === "declined").length,
+            };
         }));
-
-        const allBookings = [
-            ...wallBookings.map(b => ({ ...b.toObject(), serviceType: 'Wall Mural' })),
-            ...potteryReqs.map(p => ({ ...p.toObject(), serviceType: 'Pottery Request' }))
-        ];
 
         res.status(200).json({
             success: true,
             artistWorkloads,
-            allBookings
+            allPaintings
         });
     } catch (err) {
         next(err);

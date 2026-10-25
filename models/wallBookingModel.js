@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 
 const wallBookingSchema = new Schema({
     customer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    artist: { type: Schema.Types.ObjectId, ref: "User", required: true },
     date: { type: Date, required: true },
     size: { type: Number, required: true, min: 10, max: 500 }, // sq ft
     address: { type: String, required: true },
