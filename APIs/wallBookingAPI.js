@@ -10,7 +10,7 @@ export const wallBookingRouter = exp.Router();
 // 1. CREATE A WALL BOOKING (Customer Only)
 wallBookingRouter.post("/", verifyToken, allowedRoles(["customer"]), async (req, res, next) => {
     try {
-        const { artist, date, size, address } = req.body;
+        const { artist, date, size, address, designImage } = req.body;
         const customerId = req.user.id;
 
         if (!artist || !date || !size || !address) {
@@ -51,6 +51,7 @@ wallBookingRouter.post("/", verifyToken, allowedRoles(["customer"]), async (req,
             size,
             address,
             price,
+            designImage,
             status: "requested"
         });
 

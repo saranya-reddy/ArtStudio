@@ -7,6 +7,7 @@ const wallBookingSchema = new Schema({
     size: { type: Number, required: true, min: 10, max: 500 }, // sq ft
     address: { type: String, required: true },
     price: { type: Number, required: true },
+    designImage: { type: String }, // <-- NEW
     status: {
         type: String,
         enum: ['requested', 'confirmed', 'declined', 'cancelled'],

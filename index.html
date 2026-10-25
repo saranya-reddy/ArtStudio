@@ -47,7 +47,6 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* Persistent Header */
         header {
             background: var(--white);
             border-bottom: 1px solid var(--border-color);
@@ -76,7 +75,6 @@
             font-size: 1.2rem;
         }
 
-        /* Top-Right Profile Dropdown */
         .profile-container {
             position: relative;
             display: inline-block;
@@ -160,14 +158,12 @@
             margin-top: 0.35rem;
         }
 
-        /* Layout Structure with Left Sidebar */
         .app-layout {
             display: flex;
             flex: 1;
             min-height: calc(100vh - 65px);
         }
 
-        /* Left Side Navigation */
         .sidebar-nav {
             width: 250px;
             background: var(--white);
@@ -207,7 +203,6 @@
             border-left: 4px solid var(--accent-terracotta);
         }
 
-        /* Main View Container */
         .main-content {
             flex: 1;
             padding: 2rem;
@@ -222,7 +217,6 @@
             display: block;
         }
 
-        /* Horizontal Painting Cards */
         .horizontal-cards-list {
             display: flex;
             flex-direction: column;
@@ -319,7 +313,6 @@
             color: #8F2D32;
         }
 
-        /* Form Controls */
         .form-card {
             background: var(--white);
             border: 1px solid var(--border-color);
@@ -386,7 +379,6 @@
             color: var(--text-main);
         }
 
-        /* Tables & Auth wrapper */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
@@ -476,14 +468,12 @@
 
 <body>
 
-    <!-- Header (Always Visible) -->
     <header id="mainHeader">
         <div class="logo-area">
             <div class="logo-icon">🎨</div>
             <span class="serif">Art Studio</span>
         </div>
 
-        <!-- Top Right Profile Dropdown Area -->
         <div class="profile-container" id="profileArea" style="display: none;">
             <button class="profile-avatar-btn" onclick="toggleDropdown()">
                 <div class="avatar-circle" id="userAvatarLetter">U</div>
@@ -502,10 +492,8 @@
         </div>
     </header>
 
-    <!-- App Layout with Sidebar and Main Content -->
     <div class="app-layout">
 
-        <!-- Side Navigation Bar -->
         <nav class="sidebar-nav" id="sidebarNav" style="display: none;">
             <button class="nav-btn active" id="tabPaintings" onclick="switchDomain('paintings')">🖼️ Traditional
                 Paintings</button>
@@ -520,7 +508,6 @@
 
         <main class="main-content">
 
-            <!-- Auth Screen -->
             <div id="authScreen" class="auth-wrapper">
                 <div class="auth-card">
                     <h2 id="authTitle" class="serif"
@@ -562,7 +549,6 @@
                 </div>
             </div>
 
-            <!-- Paintings View (Horizontal Cards) -->
             <section id="paintingsView" class="section-view">
                 <div style="margin-bottom: 2rem;">
                     <h2 class="serif" style="font-size: 2rem; margin-bottom: 0.5rem;">Indian Heritage Paintings</h2>
@@ -591,13 +577,19 @@
                                 oninput="calculateWallPrice()">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Preferred Date (At least 3 days in advance)</label>
+                            <label class="form-label">Preferred Date (At least 8 days in advance)</label>
                             <input type="date" id="wallDate" class="form-input" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Full Address / Site Location</label>
                             <textarea id="wallAddress" rows="3" class="form-input" required
                                 placeholder="Enter full installation address"></textarea>
+                        </div>
+                        <!-- NEW DESIGN IMAGE INPUT -->
+                        <div class="form-group">
+                            <label class="form-label">Design Reference Image URL / Sketch (Optional)</label>
+                            <input type="text" id="wallDesignImage" class="form-input"
+                                placeholder="Paste image URL or asset path">
                         </div>
                         <div
                             style="background: var(--butter); padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
@@ -645,18 +637,22 @@
                             <label class="form-label">Needed By Date (At least 14 days in advance)</label>
                             <input type="date" id="potteryDate" class="form-input" required>
                         </div>
+                        <!-- NEW DESIGN IMAGE INPUT -->
+                        <div class="form-group">
+                            <label class="form-label">Design Reference Image URL / Sketch (Optional)</label>
+                            <input type="text" id="potteryDesignImage" class="form-input"
+                                placeholder="Paste image URL or asset path">
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit Pottery Request</button>
                     </form>
                 </div>
             </section>
 
-            <!-- Customer Orders & Bookings Pane -->
             <section id="myOrdersView" class="section-view">
                 <h2 class="serif" style="font-size: 2rem; margin-bottom: 1.5rem;">My Purchases & Bookings</h2>
                 <div id="customerHistoryContainer">Loading your records...</div>
             </section>
 
-            <!-- Artist Workspace View -->
             <section id="artistView" class="section-view">
                 <h2 class="serif" style="font-size: 2rem; margin-bottom: 0.5rem;">Artist Workspace</h2>
                 <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Manage your assigned works, publish new
@@ -686,7 +682,6 @@
                 <div id="artistTasksContainer">Loading your tasks...</div>
             </section>
 
-            <!-- Studio Manager Dashboard View -->
             <section id="studioView" class="section-view">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <div>
@@ -715,7 +710,6 @@
         </main>
     </div>
 
-    <!-- Painting Modal -->
     <div class="modal" id="paintingModal">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -735,7 +729,6 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal Dialog -->
     <div class="modal" id="confirmDialog">
         <div class="modal-content" style="max-width: 400px; text-align: center;">
             <h3 class="serif" style="margin-bottom: 1rem;">Confirm Action</h3>
@@ -1057,7 +1050,8 @@
                 artist: document.getElementById("wallArtistSelect").value,
                 size: document.getElementById("wallSize").value,
                 date: document.getElementById("wallDate").value,
-                address: document.getElementById("wallAddress").value
+                address: document.getElementById("wallAddress").value,
+                designImage: document.getElementById("wallDesignImage").value // <-- Pass design image
             };
 
             try {
@@ -1082,7 +1076,8 @@
                 item: document.getElementById("potteryItem").value,
                 glaze: document.getElementById("potteryGlaze").value,
                 quantity: document.getElementById("potteryQty").value,
-                neededByDate: document.getElementById("potteryDate").value
+                neededByDate: document.getElementById("potteryDate").value,
+                designImage: document.getElementById("potteryDesignImage").value // <-- Pass design image
             };
 
             try {
@@ -1128,7 +1123,7 @@
 
                 html += `<h3 class="serif" style="margin: 2rem 0 1rem 0;">Wall Mural Bookings</h3>`;
                 if (wallData.success && wallData.bookings?.length > 0) {
-                    html += `<table class="admin-table"><tr><th>Artist</th><th>Date</th><th>Size</th><th>Status</th><th>Action</th></tr>`;
+                    html += `<table class="admin-table"><tr><th>Artist</th><th>Date</th><th>Size</th><th>Design</th><th>Status</th><th>Action</th></tr>`;
                     wallData.bookings.forEach(b => {
                         const bookingDate = new Date(b.date);
                         const canCancel = (bookingDate - new Date()) / (1000 * 60 * 60 * 24) >= 3 && b.status !== 'cancelled' && b.status !== 'declined';
@@ -1138,11 +1133,13 @@
                         if (b.status === 'declined' || b.status === 'cancelled') statusColor = "red";
 
                         let artistName = typeof b.artist === 'object' && b.artist ? (b.artist.fullName || b.artist.username) : (b.artist || 'Assigned Artist');
+                        let designHtml = b.designImage ? `<a href="${b.designImage}" target="_blank"><img src="${b.designImage}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;" onerror="this.src='https://via.placeholder.com/40?text=Img'"></a>` : '<span style="color:#888;">No Image</span>';
 
                         html += `<tr>
                             <td>${artistName}</td>
                             <td>${new Date(b.date).toLocaleDateString()}</td>
                             <td>${b.size} sq ft</td>
+                            <td>${designHtml}</td>
                             <td><strong style="color: ${statusColor};">${b.status}</strong></td>
                             <td>${canCancel ? `<button class="btn btn-outline" style="padding:0.3rem 0.8rem;" onclick="cancelWallBooking('${b._id}')">Cancel</button>` : `<span style="color:#888; font-size:0.8rem;">Locked / Processed</span>`}</td>
                         </tr>`;
@@ -1154,13 +1151,14 @@
 
                 html += `<h3 class="serif" style="margin: 2rem 0 1rem 0;">Custom Pottery Requests</h3>`;
                 if (potteryData.success && potteryData.requests?.length > 0) {
-                    html += `<table class="admin-table"><tr><th>Artist</th><th>Item</th><th>Glaze</th><th>Qty</th><th>Needed Date</th><th>Status</th><th>Action</th></tr>`;
+                    html += `<table class="admin-table"><tr><th>Artist</th><th>Item</th><th>Glaze</th><th>Qty</th><th>Design</th><th>Needed Date</th><th>Status</th><th>Action</th></tr>`;
                     potteryData.requests.forEach(r => {
                         let statusColor = "orange";
                         if (r.status === 'confirmed' || r.status === 'accepted') statusColor = "green";
                         if (r.status === 'declined' || r.status === 'cancelled') statusColor = "red";
 
                         let artistName = typeof r.artist === 'object' && r.artist ? (r.artist.fullName || r.artist.username) : 'Assigned Artist';
+                        let designHtml = r.designImage ? `<a href="${r.designImage}" target="_blank"><img src="${r.designImage}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;" onerror="this.src='https://via.placeholder.com/40?text=Img'"></a>` : '<span style="color:#888;">No Image</span>';
                         const canCancelPottery = r.status === 'requested';
 
                         html += `<tr>
@@ -1168,6 +1166,7 @@
                             <td>${r.item}</td>
                             <td>${r.glaze}</td>
                             <td>${r.quantity}</td>
+                            <td>${designHtml}</td>
                             <td>${new Date(r.neededByDate).toLocaleDateString()}</td>
                             <td><strong style="color: ${statusColor};">${r.status}</strong></td>
                             <td>${canCancelPottery ? `<button class="btn btn-outline" style="padding:0.3rem 0.8rem;" onclick="cancelPotteryRequest('${r._id}')">Cancel</button>` : `<span style="color:#888; font-size:0.8rem;">Processed</span>`}</td>
@@ -1246,7 +1245,7 @@
                 const wallBookings = wallData.wallBookings || [];
                 if (wallBookings.length > 0) {
                     html += `<h4 class="serif" style="margin-bottom:0.5rem;">Wall Mural Bookings Assigned to You</h4>`;
-                    html += `<table class="admin-table"><tr><th>Customer</th><th>Date</th><th>Size</th><th>Address</th><th>Status</th><th>Action</th></tr>`;
+                    html += `<table class="admin-table"><tr><th>Customer</th><th>Date</th><th>Size</th><th>Address</th><th>Design</th><th>Status</th><th>Action</th></tr>`;
                     wallBookings.forEach(w => {
                         const isPending = w.status === 'requested';
                         let statusColor = "orange";
@@ -1254,12 +1253,14 @@
                         if (w.status === 'declined' || w.status === 'cancelled') statusColor = "red";
 
                         const customerName = w.customer ? (w.customer.fullName || w.customer.username) : 'Customer';
+                        let designHtml = w.designImage ? `<a href="${w.designImage}" target="_blank"><img src="${w.designImage}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;" onerror="this.src='https://via.placeholder.com/40?text=Img'"></a>` : '<span style="color:#888;">No Image</span>';
 
                         html += `<tr>
                             <td>${customerName}</td>
                             <td>${new Date(w.date).toLocaleDateString()}</td>
                             <td>${w.size} sq ft</td>
                             <td>${w.address}</td>
+                            <td>${designHtml}</td>
                             <td><strong style="color: ${statusColor};">${w.status}</strong></td>
                             <td>
                                 ${isPending ? `
@@ -1275,7 +1276,7 @@
                 const potteryRequests = potteryData.potteryRequests || [];
                 if (potteryRequests.length > 0) {
                     html += `<h4 class="serif" style="margin-bottom:0.5rem;">Custom Pottery Requests Assigned to You</h4>`;
-                    html += `<table class="admin-table"><tr><th>Customer</th><th>Item</th><th>Glaze</th><th>Qty</th><th>Needed Date</th><th>Status</th><th>Action</th></tr>`;
+                    html += `<table class="admin-table"><tr><th>Customer</th><th>Item</th><th>Glaze</th><th>Qty</th><th>Design</th><th>Needed Date</th><th>Status</th><th>Action</th></tr>`;
                     potteryRequests.forEach(r => {
                         const isPending = r.status === 'requested';
                         let statusColor = "orange";
@@ -1283,12 +1284,14 @@
                         if (r.status === 'declined' || r.status === 'cancelled') statusColor = "red";
 
                         const customerName = r.customer ? (r.customer.fullName || r.customer.username) : 'Customer';
+                        let designHtml = r.designImage ? `<a href="${r.designImage}" target="_blank"><img src="${r.designImage}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;" onerror="this.src='https://via.placeholder.com/40?text=Img'"></a>` : '<span style="color:#888;">No Image</span>';
 
                         html += `<tr>
                             <td>${customerName}</td>
                             <td>${r.item}</td>
                             <td>${r.glaze}</td>
                             <td>${r.quantity}</td>
+                            <td>${designHtml}</td>
                             <td>${new Date(r.neededByDate).toLocaleDateString()}</td>
                             <td><strong style="color: ${statusColor};">${r.status}</strong></td>
                             <td>
@@ -1380,7 +1383,6 @@
             }
 
             summaryContainer.innerHTML = workloads.map(w => {
-                // Safe number fallbacks with 0
                 const totalPaintings = w.paintingsTotal ?? w.paintingsCount ?? 0;
                 const soldPaintings = w.paintingsSold ?? 0;
                 const muralsRec = w.muralsReceived ?? 0;
@@ -1390,7 +1392,6 @@
                 const potteryAcc = w.potteryAccepted ?? 0;
                 const potteryDec = w.potteryDeclined ?? 0;
 
-                // Robust filtering of paintings belonging to this artist (matching by name or uploadedBy ID)
                 const artistPaintings = (studioDashboardCache.allPaintings || []).filter(p => {
                     if (!p.artist) return false;
                     const pArtist = String(p.artist).trim().toLowerCase();
@@ -1411,7 +1412,6 @@
                         <div>🏷️ Paintings Sold: <strong style="color: var(--accent-terracotta);">${soldPaintings}</strong></div>
                     </div>
 
-                    <!-- Paintings List Component inside Card -->
                     <div style="background: var(--bg-pastel); padding: 0.75rem; border-radius: 10px; font-size: 0.85rem;">
                         <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem;">🎨 Uploaded Artworks:</div>
                         ${artistPaintings.length > 0 ? `

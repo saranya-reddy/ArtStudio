@@ -10,7 +10,7 @@ export const potteryRequestRouter = exp.Router();
 // 1. CREATE A POTTERY REQUEST (Customer Only)
 potteryRequestRouter.post("/", verifyToken, allowedRoles(["customer"]), async (req, res, next) => {
     try {
-        const { artist, item, glaze, quantity, neededByDate } = req.body;
+        const { artist, item, glaze, quantity, neededByDate, designImage } = req.body;
         const customerId = req.user.id;
 
         if (!artist || !item || !glaze || !quantity || !neededByDate) {
@@ -30,7 +30,6 @@ potteryRequestRouter.post("/", verifyToken, allowedRoles(["customer"]), async (r
             return res.status(400).json({ success: false, message: "Needed-by date must be at least 14 days away" });
         }
 
-        // Resolve artist name string to User ObjectId
         let artistObjectId = artist;
         if (!mongoose.Types.ObjectId.isValid(artist)) {
             const artistUser = await userModel.findOne({
@@ -49,6 +48,7 @@ potteryRequestRouter.post("/", verifyToken, allowedRoles(["customer"]), async (r
             glaze,
             quantity,
             neededByDate: neededDate,
+            designImage,
             status: "requested"
         });
 
@@ -92,7 +92,7 @@ potteryRequestRouter.get("/", verifyToken, async (req, res, next) => {
 // 4. ACCEPT OR DECLINE POTTERY REQUEST (Artist/Admin Only)
 potteryRequestRouter.patch("/:id/status", verifyToken, allowedRoles(["admin"]), async (req, res, next) => {
     try {
-        const { status } = req.body; // 'confirmed', 'accepted' or 'declined'
+        const { status } = req.body;
         if (!["confirmed", "accepted", "declined"].includes(status)) {
             return res.status(400).json({ success: false, message: "Invalid status. Use 'confirmed', 'accepted' or 'declined'" });
         }

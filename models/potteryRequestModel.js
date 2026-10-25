@@ -8,6 +8,7 @@ const potteryRequestSchema = new Schema({
     quantity: { type: Number, required: true, min: 1, max: 12 },
     neededByDate: { type: Date, required: true },
     price: { type: Number },
+    designImage: { type: String }, // <-- NEW
     status: {
         type: String,
         enum: ['requested', 'confirmed', 'accepted', 'declined', 'cancelled'],
